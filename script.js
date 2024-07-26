@@ -9,7 +9,6 @@ function SetGameBoard () {
         node.remove();
     })
 
-
     const containerDiv1 = document.createElement("div");
     containerDiv1.classList.add("container");
     const imgContainerDiv1 = document.createElement("div");
@@ -25,13 +24,8 @@ function SetGameBoard () {
     containerDiv1.appendChild(imgContainerDiv2)
     
     imgContainerDiv1.appendChild(heading1)
-    
-    
+
     imgContainerDiv2.appendChild(heading2)
-    
-    
-    
-    
     
     const containerDiv2 = document.createElement("div");
     containerDiv2.classList.add("container");
@@ -51,9 +45,7 @@ function SetGameBoard () {
         img.classList.add("hp-img")
     
         hpDiv1.appendChild(img);
-    
     }
-    
     
     const hpContainerDiv2 = document.createElement("div");
     hpContainerDiv2.classList.add("hp-container");
@@ -68,7 +60,6 @@ function SetGameBoard () {
         img.classList.add("hp-img")
     
         hpDiv2.appendChild(img);
-    
     }
     
     containerDiv2.appendChild(hpContainerDiv1)
@@ -79,9 +70,6 @@ function SetGameBoard () {
     
     hpContainerDiv2.appendChild(heading4)
     hpContainerDiv2.appendChild(hpDiv2)
-
-    
-    
     
     const containerDiv3 = document.createElement("div");
     containerDiv3.classList.add("container")
@@ -100,10 +88,14 @@ function SetGameBoard () {
     const img2 = document.createElement('img');
     img2.src = "./assets/paper.svg";
     img2.classList.add("choice-img")
+
+    img2.addEventListener("click", PaperClicked)
     
     const img3 = document.createElement('img');
     img3.src = "./assets/scissors.svg";
     img3.classList.add("choice-img")
+
+    img3.addEventListener("click", ScissorsClicked);
     
     choiceDiv.appendChild(img)
     choiceDiv.appendChild(img2)
@@ -123,12 +115,25 @@ function SetGameBoard () {
 
 function RockClicked () {
     
-    
-
     compChoice= getCompPick();
 
     handleMove(0, compChoice);
 }
+
+function PaperClicked () {
+    
+    compChoice= getCompPick();
+
+    handleMove(1, compChoice);
+}
+
+function ScissorsClicked () {
+    
+    compChoice= getCompPick();
+
+    handleMove(2, compChoice);
+}
+
 
 function getCompPick () {
     return Math.floor(Math.random() * 3);
@@ -137,23 +142,31 @@ function getCompPick () {
 function handleMove (playerChoice, compChoice) {
     handleMoveImage(playerChoice, compChoice);
 
-
     if (playerChoice == compChoice) {
         
-        return;
     }
     else if ( ((playerChoice == 0 ) && (compChoice == 1)) ||
               ((playerChoice == 1 ) && (compChoice == 2)) ||
               ((playerChoice == 2 ) && (compChoice == 0))) {
         const hpMinus = document.querySelector(".hp-container > .hp-player")
-        hpMinus.removeChild(hpMinus.lastChild);
-        return;
+        hpMinus.removeChild(hpMinus.firstChild);
+        
     }
     else {
         const hpMinus = document.querySelector(".hp-container > .hp-comp")
         hpMinus.removeChild(hpMinus.lastChild);
-        return;
     }
+
+    if (!(document.querySelector(".hp-comp > .hp-img"))) {
+        alert("Congrats! You Won!!");
+        SetGameBoard();
+    } 
+    else if (!(document.querySelector(".hp-player > .hp-img"))) {
+        alert("Too Bad! You Lost!!");
+        SetGameBoard();
+    }
+
+    
 }
 
 function handleMoveImage (playerChoice, compChoice) {
@@ -162,10 +175,8 @@ function handleMoveImage (playerChoice, compChoice) {
         document.querySelector(".img-containerC > .rps-img").remove();
     } 
     
-    
     const playerImg = document.createElement('img');
     playerImg.classList.add("rps-img")
-    
 
     if (playerChoice == 0) {
         playerImg.src = "./assets/rock.svg"
